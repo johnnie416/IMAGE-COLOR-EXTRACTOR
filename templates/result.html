@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extracted Colors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f5f6fa;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+    }
+    .uploaded-img {
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      margin-bottom: 30px;
+    }
+    table {
+      width: 80%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    th, td {
+      padding: 15px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #5563DE;
+      color: white;
+      font-weight: 600;
+    }
+    td.color-box div {
+      width: 60px;
+      height: 40px;
+      border-radius: 6px;
+      margin: 0 auto;
+      border: 1px solid #ccc;
+    }
+    tr:hover {
+      background: #f1f3f9;
+    }
+    .dominant {
+      background: #fffae6 !important; /* Highlight dominant color row */
+      font-weight: 600;
+    }
+    .back-btn {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 12px 25px;
+      background: #5563DE;
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+    .back-btn:hover {
+      background: #4051b5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Extracted Colors</h1>
+  <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image" class="uploaded-img">
+
+  <table>
+    <tr>
+      <th>Color</th>
+      <th>HEX Code</th>
+      <th>Percentage</th>
+    </tr>
+    {% for color in colors %}
+    <tr class="{% if loop.index0 == 0 %}dominant{% endif %}">
+      <td class="color-box">
+        <div style="background-color: {{ color.hex | upper }};"></div>
+      </td>
+      <td onclick="copyToClipboard('{{ color.hex }}')" style="cursor:pointer;">
+        {{ color.hex | upper }}
+      </td>
+      <td>{{ color.percentage }}%</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="{{ url_for('index') }}" class="back-btn">⬅ Back to Home</a>
+
+  <script>
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied: " + text);
+      });
+    }
+  </script>
+</body>
+</html>
